@@ -1,12 +1,36 @@
-apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'war'
+apply plugin: 'jetty'
 
-sourceCompatibility = 1.5
+def groovyVersion = '2.3.6'
+def spockVersion = '0.7-groovy-2.0'
 version = '1.0'
 
+jettyRunWar {
+  httpPort = 8088
+  contextPath = '/'
+  webApp = new File('src/test/resources/hello.war')
+}
+
+test {
+  doFirst {
+    jettyRunWar.daemon = true
+    jettyRunWar.execute()
+  }
+  doLast {
+    jettyStop.stopPort = 8089
+    jettyStop.stopKey = "STOP!"
+    jettyStop.execute()
+  }
+}
+
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+  compile group: 'org.codehaus.groovy', name: 'groovy', version: groovyVersion
+  testCompile group: 'org.spockframework', name: 'spock-core', version: spockVersion
+  testRuntime group: 'cglib', name: 'cglib-nodep', version: '2.2.2'
 }
