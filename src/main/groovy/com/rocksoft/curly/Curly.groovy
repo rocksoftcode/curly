@@ -55,6 +55,8 @@ class Curly {
     Matcher matcher = (response =~ /<\/html>[\r\n]*+(.*)$/)
     if (matcher.find()) {
       return matcher.group(1)
+    } else if (response.isInteger()) {
+      return response
     } else {
       return null
     }

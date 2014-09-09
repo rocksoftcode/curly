@@ -38,5 +38,11 @@ class CurlySpec extends Specification {
 
     then:
     statusLine == null
+
+    when:
+    statusLine = Curly.readStatusLine("301")
+
+    then:
+    statusLine == "301"
   }
 }
