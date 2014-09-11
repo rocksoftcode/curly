@@ -20,29 +20,39 @@ class CurlySpec extends Specification {
 
   def "Gets status 'line'"() {
     when:
-    String statusLine = Curly.readStatusLine("<html></html>400 text/html")
+    String statusLine = Curly.readStatusLine("<html></html>\n400 text/html")
 
     then:
     statusLine == "400 text/html"
 
     when:
-    statusLine = Curly.readStatusLine('''<html></html>
-
-200''')
+    statusLine = Curly.readStatusLine('''<html></html>\n\n200''')
 
     then:
     statusLine == "200"
 
     when:
-    statusLine = Curly.readStatusLine("foobar")
+    statusLine = Curly.readStatusLine("200 text/html 801039")
 
     then:
-    statusLine == null
+    statusLine == "200 text/html 801039"
 
     when:
     statusLine = Curly.readStatusLine("301")
 
     then:
     statusLine == "301"
+
+    when:
+    statusLine = Curly.readStatusLine("</someXml>\n 200")
+
+    then:
+    statusLine == "200"
+
+    when:
+    statusLine = Curly.readStatusLine(null)
+
+    then:
+    statusLine == null
   }
 }

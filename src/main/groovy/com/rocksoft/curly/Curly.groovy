@@ -1,7 +1,5 @@
 package com.rocksoft.curly
 
-import java.util.regex.Matcher
-
 class Curly {
 
   private static final String CURL = "curl"
@@ -38,7 +36,7 @@ class Curly {
     command.addAll(FLAGS)
     if (fields) {
       command << '-w'
-      command << fields*.value().collect { "%{$it}" }.join(' ')
+      command << '\\n ' + fields*.value().collect { "%{$it}" }.join(' ')
     }
     command << normalizeUrl(url)
     if (INSECURE) {
@@ -52,13 +50,10 @@ class Curly {
   }
 
   static String readStatusLine(String response) {
-    Matcher matcher = (response =~ /<\/html>[\r\n]*+(.*)$/)
-    if (matcher.find()) {
-      return matcher.group(1)
-    } else if (response.isInteger()) {
-      return response
-    } else {
+    if (!response) {
       return null
     }
+
+    return response.readLines().last().trim()
   }
 }

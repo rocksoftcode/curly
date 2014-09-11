@@ -21,7 +21,7 @@ class CurlyIntegrationSpec extends Specification {
     CurlResponse response = Curly.forResponse("$HOST", CurlField.HTTP_STATUS_CODE, CurlField.CONTENT_TYPE)
 
     then:
-    response.body.replaceAll("[\n\r]", "") == new File("src/test/resources/hello.html").text.replaceAll("[\n\r]", "")
+    response.body.replaceAll("[\n\r]", "").trim() == new File("src/test/resources/hello.html").text.replaceAll("[\n\r]", "").trim()
     response.fields[CurlField.HTTP_STATUS_CODE] == "200"
     response.fields[CurlField.CONTENT_TYPE] == "text/html"
   }
