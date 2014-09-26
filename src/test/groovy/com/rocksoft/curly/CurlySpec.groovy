@@ -6,10 +6,10 @@ class CurlySpec extends Specification {
 
   def "Normalizes URLs"() {
     when:
-    String url = Curly.normalizeUrl("http://www.rocksoft.com#/test")
+    String url = Curly.normalizeUrl("http://www.rocksoftcode.com#/test")
 
     then:
-    url == "http://www.rocksoft.com/test"
+    url == "http://www.rocksoftcode.com/test"
 
     when:
     url = Curly.normalizeUrl("http://www.somespaces.com/spaced out stuff")

@@ -2,10 +2,8 @@ package com.rocksoft.curly
 
 class Curly {
 
-  private static final int TIMEOUT = 60
-
   private static final String CURL = "curl"
-  private static final String[] FLAGS = ['-s', '-L', "-m $TIMEOUT"]
+  private static final String[] FLAGS = ['-s', '-L', '-m', '60']
   private static final Boolean INSECURE = Boolean.TRUE
 
   static Integer forStatus(String url) {
