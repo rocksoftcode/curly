@@ -1,5 +1,7 @@
 package com.rocksoft.curly
 
+import java.util.regex.Matcher
+
 class Curly {
 
   private static final String CURL = "curl"
@@ -53,7 +55,11 @@ class Curly {
     if (!response) {
       return null
     }
-
-    return response.readLines().last().trim()
+    String lastLine = response.readLines().last().trim()
+    if (lastLine.contains(" charset=")) {
+      Matcher spaceBeforeCharset = (lastLine =~ /;\s+charset=/)
+      lastLine = spaceBeforeCharset.replaceAll(';charset=')
+    }
+    return lastLine
   }
 }

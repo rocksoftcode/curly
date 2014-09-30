@@ -38,6 +38,12 @@ class CurlySpec extends Specification {
     statusLine == "200 text/html 801039"
 
     when:
+    statusLine = Curly.readStatusLine("200 text/html;charset=utf-8 801039")
+
+    then:
+    statusLine == "200 text/html;charset=utf-8 801039"
+
+    when:
     statusLine = Curly.readStatusLine("301")
 
     then:
@@ -54,5 +60,25 @@ class CurlySpec extends Specification {
 
     then:
     statusLine == null
+  }
+
+  def "Cleans up charset on content-type"() {
+    when:
+    String statusLine = Curly.readStatusLine("200 text/html; charset=utf-8 801039")
+
+    then:
+    statusLine == "200 text/html;charset=utf-8 801039"
+
+    when:
+    statusLine = Curly.readStatusLine("200 text/html;   charset=utf-8 801039")
+
+    then:
+    statusLine == "200 text/html;charset=utf-8 801039"
+
+    when:
+    statusLine = Curly.readStatusLine("200 text/foo;   charset=utf-8 801039")
+
+    then:
+    statusLine == "200 text/foo;charset=utf-8 801039"
   }
 }
