@@ -81,4 +81,38 @@ class CurlySpec extends Specification {
     then:
     statusLine == "200 text/foo;charset=utf-8 801039"
   }
+
+  def "Parses a HEAD response into an object"() {
+    setup:
+    String mockResponseText = new File("src/test/resources/simple-head-response.txt").text
+
+    when:
+    CurlHeadResponse response = Curly.parseHeadResponse(mockResponseText)
+
+    then:
+    response.httpStatusCode == 200
+    response.getHeader(HttpHeader.CONTENT_TYPE) == ['text/html; charset=utf-8']
+    response.getHeader(HttpHeader.CONTENT_LENGTH) == ['849']
+    response.getHeader(HttpHeader.SET_COOKIE) == ['BCSI-CS-8caa5bd26cfb5782=2; Path=/']
+    response.getHeader('Cache-Control') == ['no-cache']
+    response.getHeader('Pragma') == ['no-cache']
+    response.getHeader('Connection') == ['close']
+  }
+
+  def "Parses last entry in a chained HEAD response into an object"() {
+    setup:
+    String mockResponseText = new File("src/test/resources/chained-head-response.txt").text
+
+    when:
+    CurlHeadResponse response = Curly.parseHeadResponse(mockResponseText)
+
+    then:
+    response.httpStatusCode == 200
+    response.getHeader(HttpHeader.CONTENT_TYPE) == ['text/html; charset=utf-8']
+    response.getHeader(HttpHeader.CONTENT_LENGTH) == ['849']
+    response.getHeader(HttpHeader.SET_COOKIE) == ['BCSI-CS-8caa5bd26cfb5782=2; Path=/']
+    response.getHeader('Cache-Control') == ['no-cache']
+    response.getHeader('Pragma') == ['no-cache']
+    response.getHeader('Connection') == ['close']
+  }
 }

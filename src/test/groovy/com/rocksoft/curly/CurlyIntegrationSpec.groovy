@@ -25,4 +25,14 @@ class CurlyIntegrationSpec extends Specification {
     response.fields[CurlField.HTTP_STATUS_CODE] == "200"
     response.fields[CurlField.CONTENT_TYPE] == "text/html"
   }
+
+  def "Gets head response"() {
+    when:
+    CurlHeadResponse response = Curly.forHead("$HOST")
+
+    then:
+    response.httpStatusCode == 200
+    response.getHeader(HttpHeader.CONTENT_TYPE).first() == "text/html"
+    response.getHeader(HttpHeader.CONTENT_LENGTH).first().isNumber()
+  }
 }

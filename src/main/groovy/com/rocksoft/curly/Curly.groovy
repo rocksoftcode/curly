@@ -62,4 +62,34 @@ class Curly {
     }
     return lastLine
   }
+
+  static CurlHeadResponse forHead(String url) {
+    List<String> command = [CURL]
+    command.addAll(FLAGS)
+    command << '-I'
+    command << normalizeUrl(url)
+    if (INSECURE) {
+      command << "--insecure"
+    }
+    return parseHeadResponse(command.execute().in.text)
+  }
+
+  static CurlHeadResponse parseHeadResponse(String text) {
+    CurlHeadResponse response = new CurlHeadResponse()
+    if (text.lastIndexOf('HTTP/') > 0) {
+      text = text.substring(text.lastIndexOf('HTTP/'))
+    }
+    text.eachLine { String line ->
+      String[] parts = line.split(':')
+      if (parts.length == 1) {
+        if (line.contains("HTTP/")) {
+          response.httpStatusCode = line.split(' ')[1].toInteger()
+        }
+      } else {
+        response.addHeader(parts.first(), parts.last().trim())
+      }
+    }
+
+    return response
+  }
 }
