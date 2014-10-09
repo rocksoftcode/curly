@@ -76,9 +76,7 @@ class Curly {
 
   static CurlHeadResponse parseHeadResponse(String text) {
     CurlHeadResponse response = new CurlHeadResponse()
-    if (text.lastIndexOf('HTTP/') > 0) {
-      text = text.substring(text.lastIndexOf('HTTP/'))
-    }
+
     text.eachLine { String line ->
       String[] parts = line.split(':')
       if (parts.length == 1) {

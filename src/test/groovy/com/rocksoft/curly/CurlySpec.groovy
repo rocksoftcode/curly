@@ -99,7 +99,7 @@ class CurlySpec extends Specification {
     response.getHeader('Connection') == ['close']
   }
 
-  def "Parses last entry in a chained HEAD response into an object"() {
+  def "Parses all entries in a chained HEAD response into an object, returning last status"() {
     setup:
     String mockResponseText = new File("src/test/resources/chained-head-response.txt").text
 
@@ -108,12 +108,12 @@ class CurlySpec extends Specification {
 
     then:
     response.httpStatusCode == 200
-    response.getHeader(HttpHeader.CONTENT_TYPE) == ['text/html; charset=utf-8']
+    response.getHeader(HttpHeader.CONTENT_TYPE) == ["text/html; charset=UTF-8", "text/html; charset=UTF-8", "text/html; charset=utf-8"]
     response.getHeader(HttpHeader.CONTENT_LENGTH) == ['849']
     response.getHeader(HttpHeader.SET_COOKIE) == ['BCSI-CS-8caa5bd26cfb5782=2; Path=/']
-    response.getHeader('Cache-Control') == ['no-cache']
+    response.getHeader('Cache-Control') == ["private, max-age=0", "private, max-age=0", "no-cache"]
     response.getHeader('Pragma') == ['no-cache']
-    response.getHeader('Connection') == ['close']
+    response.getHeader('Connection') == ['Keep-Alive', 'Keep-Alive', 'close']
   }
 
   def "Returns location field and date correctly"() {
@@ -128,5 +128,10 @@ class CurlySpec extends Specification {
     response.getHeader(HttpHeader.LOCATION).first() == "http://corporate.target.com?ref=sr_shorturl_about"
     response.getHeader(HttpHeader.DATE).size() == 1
     response.getHeader(HttpHeader.DATE).first() == "Thu, 09 Oct 2014 20:44:50 GMT"
+  }
+
+  def "Why??"() {
+    expect:
+    Curly.forHead("http://target.com/about").getHeader(HttpHeader.LOCATION)
   }
 }
