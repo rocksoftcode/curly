@@ -85,6 +85,8 @@ class Curly {
         if (line.contains("HTTP/")) {
           response.httpStatusCode = line.split(' ')[1].toInteger()
         }
+      } else if (parts.length > 2) {
+        response.addHeader(parts.first(), parts[1..<parts.size()].join(':').trim())
       } else {
         response.addHeader(parts.first(), parts.last().trim())
       }

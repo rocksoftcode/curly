@@ -1,0 +1,7 @@
+HTTP/1.1 301 Moved Permanently
+Date: Thu, 09 Oct 2014 20:44:50 GMT
+Server: IBM_HTTP_Server
+Location: http://corporate.target.com?ref=sr_shorturl_about
+Content-Length: 0
+Content-Type: text/plain
+Content-Language: en-US

@@ -115,4 +115,18 @@ class CurlySpec extends Specification {
     response.getHeader('Pragma') == ['no-cache']
     response.getHeader('Connection') == ['close']
   }
+
+  def "Returns location field and date correctly"() {
+    setup:
+    String mockResponseText = new File("src/test/resources/simple-head-response-2.txt").text
+
+    when:
+    CurlHeadResponse response = Curly.parseHeadResponse(mockResponseText)
+
+    then:
+    response.getHeader(HttpHeader.LOCATION).size() == 1
+    response.getHeader(HttpHeader.LOCATION).first() == "http://corporate.target.com?ref=sr_shorturl_about"
+    response.getHeader(HttpHeader.DATE).size() == 1
+    response.getHeader(HttpHeader.DATE).first() == "Thu, 09 Oct 2014 20:44:50 GMT"
+  }
 }
