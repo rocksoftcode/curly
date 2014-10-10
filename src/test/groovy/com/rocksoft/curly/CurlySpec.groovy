@@ -129,9 +129,4 @@ class CurlySpec extends Specification {
     response.getHeader(HttpHeader.DATE).size() == 1
     response.getHeader(HttpHeader.DATE).first() == "Thu, 09 Oct 2014 20:44:50 GMT"
   }
-
-  def "Why??"() {
-    expect:
-    Curly.forHead("http://target.com/about").getHeader(HttpHeader.LOCATION)
-  }
 }
