@@ -26,7 +26,7 @@ class Curly {
     return forResponse(url, [:], fields)
   }
 
-  static CurlResponse forResponse(String url, Map<String,String> headers, CurlField... fields) {
+  static CurlResponse forResponse(String url, Map<String, String> headers, CurlField... fields) {
     String response = doCurl(url, headers, fields)
     String statusLine = readStatusLine(response)
     Map<CurlField, String> responseFields = [:]
@@ -41,7 +41,7 @@ class Curly {
     return doCurl(url, [:], fields)
   }
 
-  private static String doCurl(String url, Map<String,String> headers, CurlField... fields) {
+  private static String doCurl(String url, Map<String, String> headers, CurlField... fields) {
     List<String> command = [CURL]
     command.addAll(FLAGS)
     command.addAll(getHeaderFlags(headers))
