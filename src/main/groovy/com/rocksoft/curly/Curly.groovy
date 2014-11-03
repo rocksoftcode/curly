@@ -23,7 +23,11 @@ class Curly {
   }
 
   static CurlResponse forResponse(String url, CurlField... fields) {
-    String response = doCurl(url, fields)
+    return forResponse(url, [:], fields)
+  }
+
+  static CurlResponse forResponse(String url, Map<String,String> headers, CurlField... fields) {
+    String response = doCurl(url, headers, fields)
     String statusLine = readStatusLine(response)
     Map<CurlField, String> responseFields = [:]
     statusLine.split(' ').eachWithIndex{ String value, int i ->
@@ -34,8 +38,13 @@ class Curly {
   }
 
   private static String doCurl(String url, CurlField... fields) {
+    return doCurl(url, [:], fields)
+  }
+
+  private static String doCurl(String url, Map<String,String> headers, CurlField... fields) {
     List<String> command = [CURL]
     command.addAll(FLAGS)
+    command.addAll(getHeaderFlags(headers))
     if (fields) {
       command << '-w'
       command << '\\n ' + fields*.value().collect { "%{$it}" }.join(' ')
@@ -91,5 +100,14 @@ class Curly {
     }
 
     return response
+  }
+
+  private static List<String> getHeaderFlags(Map<String, String> headers) {
+    List<String> headerFlags = []
+    headers.each { String key, String value ->
+      headerFlags.add("-H")
+      headerFlags.add("${key}: ${value}")
+    }
+    return headerFlags
   }
 }

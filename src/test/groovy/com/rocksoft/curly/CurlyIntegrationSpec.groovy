@@ -35,4 +35,13 @@ class CurlyIntegrationSpec extends Specification {
     response.getHeader(HttpHeader.CONTENT_TYPE).first() == "text/html"
     response.getHeader(HttpHeader.CONTENT_LENGTH).first().isNumber()
   }
+
+  def "Sends User Agent as an extra header"() {
+    when:
+    CurlResponse response = Curly.forResponse("$HOST/userAgent.jsp", [(HeaderField.USER_AGENT.value): "Test User Agent"], CurlField.HTTP_STATUS_CODE)
+
+    then:
+    response
+    response.body.replaceAll("[\n\r]", "").trim() == new File("src/test/resources/userAgent.html").text.replaceAll("[\n\r]", "").trim()
+  }
 }

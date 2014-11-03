@@ -87,4 +87,12 @@ class CurlySpec extends Specification {
     response.getHeader(HttpHeader.DATE).size() == 1
     response.getHeader(HttpHeader.DATE).first() == "Thu, 09 Oct 2014 20:44:50 GMT"
   }
+
+  def "Convert headers map in curl command line flags"() {
+    setup:
+    Map<HeaderField,String> headers = [(HeaderField.USER_AGENT.value): "Test User Agent", "Custom-Header": "Custom Header"]
+
+    expect:
+    Curly.getHeaderFlags(headers) == ["-H", "User-Agent: Test User Agent", "-H", "Custom-Header: Custom Header"]
+  }
 }
