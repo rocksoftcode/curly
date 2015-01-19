@@ -5,7 +5,7 @@ import java.util.regex.Matcher
 class Curly {
 
   private static final String CURL = "curl"
-  private static final String[] FLAGS = ['-s', '-L', '-m', '60']
+  private static final String[] FLAGS = ['--compressed', '-s', '-L', '-m', '60']
   private static final Boolean INSECURE = Boolean.TRUE
 
   static Integer forStatus(String url) {
