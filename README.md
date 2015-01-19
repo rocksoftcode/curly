@@ -15,4 +15,4 @@ assert response.fields[CurlField.TIME_TOTAL].toInteger() < 60
 ```
 Hopefully you find this library useful.  
 
-*TODO:* The next logical enhancement would be to add headers and request body. 
+*TODO:* The next logical enhancement would be to add request body. 
